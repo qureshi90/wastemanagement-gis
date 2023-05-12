@@ -1,9 +1,10 @@
 import { collection, getDocs } from 'firebase/firestore';
 import React from 'react';
 import { db } from '../firebase';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ExistingUser = ({ setActivePage }) => {
+  const navigate = useNavigate();
   const [users, setUsers] = React.useState([]);
   const usersCollectionRef = collection(db, 'users');
 
@@ -20,7 +21,7 @@ const ExistingUser = ({ setActivePage }) => {
     const userId = e.target.value;
 
     localStorage.setItem('currentUser', JSON.stringify(users.find((u) => u.id === userId)));
-    window.location.href = '/map';
+    navigate("/map");
   };
   return (
     <div className='h-screen bg-gray-100 flex justify-center items-center'>
