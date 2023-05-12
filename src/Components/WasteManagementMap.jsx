@@ -153,13 +153,11 @@ const WasteManagementMap = () => {
   };
 
   const waypoints = markerLocations
-    .filter((m) => m.type === "Dustbin")
+    .filter((m) => m.type === "Dustbin" && m.storage > 70)
     .map((p) => ({
       location: { lat: p.lat, lng: p.lng },
       stopover: true,
     }));
-
-  console.log(waypoints);
 
   return (
     <div className="h-96">
