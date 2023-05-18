@@ -4,6 +4,23 @@ import WasteManagementMap from "./Components/WasteManagementMap";
 import RegisterUser from "./Components/RegisterUser";
 import "./App.css";
 
+const LoadingWrapper = (props) => (
+  <>
+    {props.loading ? (
+      <div className="w-screen h-screen">
+        <img
+          src={require("./assets/image.jpeg")}
+          className="w-full h-full"
+          alt="loading"
+        />
+        <div className="linear-loader" />
+      </div>
+    ) : (
+      props.children
+    )}
+  </>
+);
+
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -17,26 +34,23 @@ function App() {
     {
       path: "/",
       exact: true,
-      element: <RegisterUser />,
+      element: (
+        <LoadingWrapper loading={loading}>
+          <RegisterUser />
+        </LoadingWrapper>
+      ),
     },
     {
       path: "/map",
-      element: <WasteManagementMap />,
+      element: (
+        <LoadingWrapper loading={loading}>
+          <WasteManagementMap />
+        </LoadingWrapper>
+      ),
     },
   ]);
 
-  return loading ? (
-    <div className="w-screen h-screen">
-      <img
-        src={require("./assets/image.jpeg")}
-        className="w-full h-full"
-        alt="loading"
-      />
-      <div className="linear-loader" />
-    </div>
-  ) : (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
