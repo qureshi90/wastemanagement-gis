@@ -2,3 +2,37 @@
   height: 100%;
   width: 100%;
 }
+
+.linear-loader {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  width: 30%;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #ccc;
+  transform: translate(-50%);
+}
+
+.linear-loader::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  border-radius: 8px;
+  background-color: #007bff;
+  animation: linear-loader-animation 3s ease-in-out;
+}
+
+@keyframes linear-loader-animation {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
