@@ -16,6 +16,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
+      exact: true,
       element: <RegisterUser />,
     },
     {
