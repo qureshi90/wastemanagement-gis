@@ -118,12 +118,12 @@ const WasteManagementMap = () => {
     };
 
     return {
-      path: vehicles[vehicleType ?? "vehicle"],
+      path: vehicles[vehicleType ?? "pickup"],
       fillColor: "red",
       fillOpacity: 2,
       strokeWeight: 1,
       rotation: 0,
-      scale: scale[vehicleType ?? "vehicle"],
+      scale: scale[vehicleType ?? "pickup"],
     };
   };
 
