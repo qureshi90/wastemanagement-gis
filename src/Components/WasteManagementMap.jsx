@@ -195,7 +195,6 @@ const WasteManagementMap = () => {
                         await deleteDoc(doc(db, "markers", currentPoint.id));
                       }
                       setCurrentPoint(null);
-                      users();
                     }}
                     className="mt-3 px-3 py-1 bg-blue-400 rounded-md"
                   >
