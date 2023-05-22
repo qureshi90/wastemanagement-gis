@@ -102,7 +102,7 @@ const WasteManagementMap = () => {
     fillOpacity: 2,
     strokeWeight: 1,
     rotation: 0,
-    scale: 1,
+    scale: 0.75,
   };
 
   const dustBinMarker = (e) => {
@@ -209,7 +209,7 @@ const WasteManagementMap = () => {
               callback={directionsCallback}
               options={{
                 destination,
-                origin: center,
+                origin: { lat: 34.06754708661514, lng: 71.99837788590158 }, // used hardcoded location of cantonement board risalpur
                 travelMode: "DRIVING",
                 waypoints,
               }}
@@ -232,7 +232,7 @@ const WasteManagementMap = () => {
               }
               draggable
               icon={carMarker}
-              position={center}
+              position={{ lat: 34.06754708661514, lng: 71.99837788590158 }} // used hardcoded location of cantonement board risalpur
             />
           )}
           {markerLocations
