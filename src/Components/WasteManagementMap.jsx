@@ -92,9 +92,16 @@ const WasteManagementMap = () => {
     [currentLocation]
   );
 
+  let count = React.useRef(0);
+
   const directionsCallback = (response) => {
-    if (response.status === "OK") {
-      setDirectionResponse(response);
+    if (response !== null && count.current < 2) {
+      if (response.status === "OK") {
+        count.current += 1;
+        setDirectionResponse(response);
+      } else {
+        count.current = 0;
+      }
     }
   };
 
@@ -255,13 +262,30 @@ const WasteManagementMap = () => {
             <DistanceMatrixService
               options={{
                 origins: [cantonementBoard],
-                destinations: [destination],
+                destinations: [
+                  ...waypoints.map((point) => point.location),
+                  destination,
+                ],
                 travelMode: "DRIVING",
               }}
               callback={(res) => {
+                let totalDistance =
+                  (
+                    res.rows[0].elements
+                      .map((ele) => ele.distance.value)
+                      .reduce((a, b) => a + b) / 1000
+                  ).toFixed(2) + " km";
+
+                let totalTime =
+                  Math.trunc(
+                    res.rows[0].elements
+                      .map((ele) => ele.duration.value)
+                      .reduce((a, b) => a + b) / 60
+                  ) + " min";
+
                 setEstimates({
-                  totalTime: res.rows[0].elements[0].duration.text,
-                  totalDistance: res.rows[0].elements[0].distance.text,
+                  totalTime: totalTime,
+                  totalDistance: totalDistance,
                 });
               }}
             />
@@ -283,9 +307,9 @@ const WasteManagementMap = () => {
             .filter((m) =>
               currentUser.role === "House keeper" ? m.type === "Dustbin" : true
             )
-            .map((e) => (
+            .map((e, index) => (
               <MarkerF
-                key={e.lng + e.id}
+                key={index}
                 icon={
                   e.type === "Dustbin" ? dustBinMarker(e) : collectionMarker
                 }
