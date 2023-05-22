@@ -9,6 +9,7 @@ import React, {
 import {
   DirectionsRenderer,
   DirectionsService,
+  DistanceMatrixService,
   GoogleMap,
   InfoWindowF,
   MarkerF,
@@ -38,6 +39,7 @@ const WasteManagementMap = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyB04vgw5u1yAzDbF91d-1lEGCU68g047eU",
   });
+  const [estimates, setEstimates] = useState({});
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const markerCollectionRef = collection(db, "markers");
@@ -179,8 +181,13 @@ const WasteManagementMap = () => {
       stopover: true,
     }));
 
+  const cantonementBoard = {
+    lat: 34.06754708661514,
+    lng: 71.99837788590158,
+  };
+
   return (
-    <div className="h-96">
+    <div className="h-screen">
       {!isLoaded ? (
         <h1>Loading...</h1>
       ) : (
@@ -196,7 +203,7 @@ const WasteManagementMap = () => {
           }
           mapContainerClassName="map-container"
           center={center}
-          zoom={10}
+          zoom={14}
         >
           {currentPoint && (
             <InfoWindowF position={currentPoint}>
@@ -231,7 +238,7 @@ const WasteManagementMap = () => {
               callback={directionsCallback}
               options={{
                 destination,
-                origin: { lat: 34.06754708661514, lng: 71.99837788590158 }, // used hardcoded location of cantonement board risalpur
+                origin: cantonementBoard, // used hardcoded location of cantonement board risalpur
                 travelMode: "DRIVING",
                 waypoints,
               }}
@@ -241,6 +248,21 @@ const WasteManagementMap = () => {
             <DirectionsRenderer
               options={{
                 directions: directionResponse,
+              }}
+            />
+          )}
+          {destination && (
+            <DistanceMatrixService
+              options={{
+                origins: [cantonementBoard],
+                destinations: [destination],
+                travelMode: "DRIVING",
+              }}
+              callback={(res) => {
+                setEstimates({
+                  totalTime: res.rows[0].elements[0].duration.text,
+                  totalDistance: res.rows[0].elements[0].distance.text,
+                });
               }}
             />
           )}
@@ -254,7 +276,7 @@ const WasteManagementMap = () => {
               }
               draggable
               icon={carMarker(currentUser.vehicleType)}
-              position={{ lat: 34.06754708661514, lng: 71.99837788590158 }} // used hardcoded location of cantonement board risalpur
+              position={cantonementBoard} // used hardcoded location of cantonement board risalpur
             />
           )}
           {markerLocations
@@ -295,6 +317,19 @@ const WasteManagementMap = () => {
             <option>Dustbin</option>
             <option>Dumping Site</option>
           </select>
+        </div>
+      )}
+
+      {destination && (
+        <div className="flex flex-col items-center mt-4">
+          <div className="flex gap-2">
+            <h1>Distance:</h1>
+            <p>{estimates.totalDistance}</p>
+          </div>
+          <div className="flex gap-2">
+            <h1>Time:</h1>
+            <p>{estimates.totalTime}</p>
+          </div>
         </div>
       )}
 
