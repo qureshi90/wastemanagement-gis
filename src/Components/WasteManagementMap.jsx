@@ -247,7 +247,9 @@ const WasteManagementMap = () => {
                 }
                 onClick={() => setCurrentPoint(e)}
                 onDblClick={() =>
-                  currentUser.role === "Driver" && setDestination(e)
+                  currentUser.role === "Driver" &&
+                  e.type !== "Dustbin" &&
+                  setDestination(e)
                 }
                 position={e}
               />
@@ -269,7 +271,7 @@ const WasteManagementMap = () => {
             onChange={(e) => setMarkerType(e.target.value)}
           >
             <option>Dustbin</option>
-            <option>Collection Point</option>
+            <option>Dumping Site</option>
           </select>
         </div>
       )}
